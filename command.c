@@ -64,3 +64,12 @@ int parse_command(char *cmdline, command_t* cmd)
 
     return EXIT_SUCCESS;
 }
+
+void free_command(command_t* cmd)
+{
+    int i;
+    for(i = 0; i < cmd->argc; i++)
+        free(cmd->argv[i]);
+
+    free(cmd->name);
+}

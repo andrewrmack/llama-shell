@@ -32,5 +32,6 @@ typedef struct {
 } command_t;
 
 int parse_command(char* cmdline, command_t* cmd);
+void free_command(command_t* cmd);
 
 #endif

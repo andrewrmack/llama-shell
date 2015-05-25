@@ -29,17 +29,9 @@
 
 #include "command.h"
 
-/* TODO: Should this return an int and check value? */
-void change_directory(command_t* cmd)
-{
-    if(cmd->argc == 1) {
-        char *home_dir = getenv("HOME");
-        chdir(home_dir);
-    } else if (cmd->argc == 2)
-        chdir(cmd->argv[1]);
-    else
-        fprintf(stderr, "cd: too many arguments!\n");
-}
+/* Shell built-ins */
+void change_directory(command_t* cmd);
+
 int main(int argc, char* argv[])
 {
     char cmdbuff[BUF_LEN];
@@ -71,7 +63,10 @@ int main(int argc, char* argv[])
 
             if(!strcmp(cmd.name, "cd"))
                 change_directory(&cmd);
-            else {
+            else if(!strcmp(cmd.name, "exit")) {
+                free_command(&cmd);
+                break;
+            } else {
                 childpid = fork();
 
                 if(childpid == 0) {
@@ -86,8 +81,22 @@ int main(int argc, char* argv[])
                     return EXIT_FAILURE;
                 }
             }
+
+        free_command(&cmd);
         }
     }
 
     return EXIT_SUCCESS;
+}
+
+/* TODO: Should this return an int and check value? */
+void change_directory(command_t* cmd)
+{
+    if(cmd->argc == 1) {
+        char *home_dir = getenv("HOME");
+        chdir(home_dir);
+    } else if (cmd->argc == 2)
+        chdir(cmd->argv[1]);
+    else
+        fprintf(stderr, "cd: too many arguments!\n");
 }
