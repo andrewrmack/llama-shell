@@ -3,12 +3,12 @@
 OBJ=main.o command.o
 PROG=llama-shell
 
-CFLAGS=-Wall -Wextra -pedantic
+CFLAGS=-O2
 CC=gcc
 
 all: $(PROG)
 
-debug: CFLAGS+=-g
+debug: CFLAGS+=-g -Wall -Wextra -pedantic
 debug: $(PROG)
 
 $(PROG): $(OBJ)
