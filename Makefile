@@ -9,7 +9,7 @@ CC=gcc
 all: $(PROG)
 
 debug: CFLAGS+=-g
-debug: ashell
+debug: $(PROG)
 
 $(PROG): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ)
