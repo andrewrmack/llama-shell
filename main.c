@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     /* TODO: change this when implementing pipes, dependend cmds, etc. */
     char *cmdline = cmdbuff;
     command_t cmd;
-    int childpid;
+    pid_t child;
 
     if(argc != 1) {
         /* TODO: Will parse here when args support is added */
@@ -67,13 +67,13 @@ int main(int argc, char* argv[])
                 free_command(&cmd);
                 break;
             } else {
-                childpid = fork();
+                child = fork();
 
-                if(childpid == 0) {
+                if(child == 0) {
                     execvp(cmd.name, cmd.argv);
                     fprintf(stderr, "Error executing command %s: %s\n",
                             cmd.name, strerror(errno));
-                } else if (childpid > 0)
+                } else if (child > 0)
                     wait(NULL);
                 else {
                     fprintf(stderr, "Error forking child process: %s\n",
