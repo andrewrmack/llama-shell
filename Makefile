@@ -1,7 +1,7 @@
-### Makefile for AShell ###
+### Makefile for llama-shell ###
 
 OBJ=main.o command.o
-PROG=ashell
+PROG=llama-shell
 
 CFLAGS=-Wall -Wextra -pedantic
 CC=gcc
