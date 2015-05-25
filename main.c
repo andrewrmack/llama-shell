@@ -24,6 +24,8 @@
 #include <string.h>
 #include <errno.h>
 #include <ctype.h>
+#include <signal.h>
+#include <libgen.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -34,6 +36,8 @@ void change_directory(command_t* cmd);
 
 int main(int argc, char* argv[])
 {
+    char *user = getenv("USER");
+    char *base_dir = basename(getcwd(NULL, 256));
     char cmdbuff[BUF_LEN];
     /* TODO: change this when implementing pipes, dependend cmds, etc. */
     char *cmdline = cmdbuff;
@@ -46,9 +50,15 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
+    /* Shell shouldn't exit when a child process is killed, so we mask
+     * SIGINT, SIGTSTP, and SIGQUIT and will unmask them in the child fork
+     */
+
+    //sigset_t sig_mask, old_sig_mask;
+
     while(1) {
         /* TODO: implement PS1 variable support */
-        printf(">>> ");
+        printf("[%s] %s $ ", user, base_dir);
         if(fgets(cmdline, BUF_LEN, stdin) == NULL) {
             putchar('\n');
             return EXIT_SUCCESS;
@@ -83,6 +93,8 @@ int main(int argc, char* argv[])
             }
 
         free_command(&cmd);
+        user = getenv("USER");
+        base_dir = basename(getcwd(NULL, 256));
         }
     }
 
