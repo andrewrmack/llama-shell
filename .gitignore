@@ -27,6 +27,13 @@
 *.i*86
 *.x86_64
 *.hex
+llama-shell
 
 # Debug files
 *.dSYM/
+
+# Vim Swap Files
+*.swp
+
+# Testing programs
+test*
