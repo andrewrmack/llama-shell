@@ -77,9 +77,6 @@ int parse_command(char *cmdline, command_t *cmd)
 
     strcpy(cmd->name, cmd->argv[0]);
 
-    /* we haven't implemented foreground vs. background, so just set fg */
-    cmd->fg = 1;
-
     return EXIT_SUCCESS;
 }
 

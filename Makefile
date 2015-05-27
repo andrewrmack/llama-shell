@@ -8,9 +8,6 @@ CC=gcc
 
 all: $(PROG)
 
-debug: CFLAGS=-g -Wall -Wextra -pedantic
-debug: $(PROG)
-
 $(PROG): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ)
 

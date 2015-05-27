@@ -39,35 +39,16 @@ int main(int argc, char* argv[])
     char *user = getenv("USER");
     char *base_dir = basename(getcwd(NULL, 256));
     char cmdbuff[BUF_LEN];
-    /* TODO: change this when implementing pipes, dependend cmds, etc. */
     char *cmdline = cmdbuff;
     command_t cmd;
     pid_t child;
 
     if(argc != 1) {
-        /* TODO: Will parse here when args support is added */
         fprintf(stderr, "arguments not yet supported!\n");
         return EXIT_FAILURE;
     }
-    /*** WIP: Signal handling is currently broken ***/
-    /* Shell shouldn't exit when a child process is killed, so we mask
-     * SIGINT, SIGTSTP, and SIGQUIT and will unmask them in the child fork
-     */
-
-    //sigset_t sig_mask, old_sig_mask;
-    //sigemptyset(&sig_mask);
-    //sigaddset(&sig_mask, SIGINT);
-    //sigaddset(&sig_mask, SIGTSTP);
-    //sigaddset(&sig_mask, SIGQUIT);
-
-    //if(sigprocmask(SIG_BLOCK, &sig_mask, &old_sig_mask) != 0) {
-    //    fprintf(stderr, "Error masking signals: %s\n"
-    //                    "This may result in problems with ^C, etc.\n",
-    //                    strerror(errno));
-    //}
 
     while(1) {
-        /* TODO: implement PS1 variable support */
         printf("[%s] %s $ ", user, base_dir);
         if(fgets(cmdline, BUF_LEN, stdin) == NULL) {
             putchar('\n');
@@ -94,7 +75,6 @@ int main(int argc, char* argv[])
                     /* give child its own process group */
                     setpgid(0, 0);
 
-                    //sigprocmask(SIG_SETMASK, &old_sig_mask, NULL);
                     execvp(cmd.name, cmd.argv);
                     fprintf(stderr, "Error executing command %s: %s\n",
                             cmd.name, strerror(errno));
