@@ -1,5 +1,6 @@
 # llama-shell
 At this point, llama-shell is a very basic shell and is only capable of running single commands. A cd command is included. Still to-do:
+* Signal handling
 * Pipes and other multi-command lines
 * Scripting ability
 * Shell environment

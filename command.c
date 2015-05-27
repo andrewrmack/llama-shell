@@ -25,7 +25,22 @@
 
 #include "command.h"
 
-int parse_command(char *cmdline, command_t* cmd)
+/**
+ * @name    parse_command
+ * @arg     cmdline, string
+ * @arg     cmd, command pointer
+ *
+ * @brief   parses a string into command and arguments
+ *
+ * @pre     cmdline has had already been parsed for pipes and redirects
+ *
+ * @post    cmd contains information about the command contained in cmdline
+ *
+ * @note    the line is parsed and each word is passed directly to
+ *          execvp(), thus, any redirects must be parsed out before the
+ *          line is passed to parse_command
+ */
+int parse_command(char *cmdline, command_t *cmd)
 {
     int argc = 0;
     char* word;
@@ -43,7 +58,7 @@ int parse_command(char *cmdline, command_t* cmd)
                 return EXIT_FAILURE;
             }
 
-            strcpy(cmd->argv[argc], word);//, BUF_LEN);
+            strcpy(cmd->argv[argc], word);
             argc++;
         }
         word = strsep(&cmdline, WHITESPACE);
@@ -60,11 +75,25 @@ int parse_command(char *cmdline, command_t* cmd)
         return EXIT_FAILURE;
     }
 
-    strcpy(cmd->name, cmd->argv[0]);//, BUF_LEN);
+    strcpy(cmd->name, cmd->argv[0]);
+
+    /* we haven't implemented foreground vs. background, so just set fg */
+    cmd->fg = 1;
 
     return EXIT_SUCCESS;
 }
 
+/**
+ * @name    free_command
+ * @arg     cmd, command pointer
+ *
+ * @brief   frees a command structure
+ *
+ * @pre     cmd points to a command structure whose argv and name fields
+ *          HAVE BEEN MALLOCED
+ *
+ * @post    cmd->name and all fields of cmd->argv are freed
+ */
 void free_command(command_t* cmd)
 {
     int i;

@@ -26,9 +26,11 @@
 #define WHITESPACE " \t\n"
 
 typedef struct {
-    char* name;
-    int argc;
-    char* argv[MAX_ARGS+1];
+    char* name;              /* command name, same as argv[0] */
+    int argc;                /* number of arguments, including name */
+    char* argv[MAX_ARGS+1];  /* array of arguments, argv[0] is name */
+    char fg;                 /* if 1, process is foreground,
+                              * otherwise, it is background */
 } command_t;
 
 int parse_command(char* cmdline, command_t* cmd);
