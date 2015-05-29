@@ -1,18 +1,26 @@
 ### Makefile for llama-shell ###
 
-OBJ=main.o command.o
+OBJS=main.o command.o signal_handlers.o
+LIBS=command.h signal_handlers.h
 PROG=llama-shell
 
 CFLAGS=-O2
+INCL=-Iinclude/
 CC=gcc
+
+vpath %.h include/
+vpath %.c src/
 
 all: $(PROG)
 
-$(PROG): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ)
+debug: CFLAGS=-g -Wall -Wextra -pedantic
+debug: $(PROG)
 
-%.o: %.c command.h
-	$(CC) $(CFLAGS) -c $<
+$(PROG): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS)
+
+%.o: %.c $(LIBS)
+	$(CC) $(INCL) $(CFLAGS) -c $<
 
 .PHONY: clean
 clean:

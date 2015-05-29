@@ -30,6 +30,7 @@
 #include <sys/wait.h>
 
 #include "command.h"
+#include "signal_handlers.h"
 
 /* Shell built-ins */
 void change_directory(command_t* cmd);
@@ -47,6 +48,10 @@ int main(int argc, char* argv[])
         fprintf(stderr, "arguments not yet supported!\n");
         return EXIT_FAILURE;
     }
+    /* WIP: Signal handling is currently broken */
+    /* Shell shouldn't exit when a child process is killed, so we mask
+     * SIGINT, SIGTSTP, and SIGQUIT and will unmask them in the child fork
+     */
 
     while(1) {
         printf("[%s] %s $ ", user, base_dir);
