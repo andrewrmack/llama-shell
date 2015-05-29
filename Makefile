@@ -5,7 +5,11 @@ LIBS=command.h signal_handlers.h
 PROG=llama-shell
 
 CFLAGS=-O2
+INCL=-Iinclude/
 CC=gcc
+
+vpath %.h include/
+vpath %.c src/
 
 all: $(PROG)
 
@@ -16,7 +20,7 @@ $(PROG): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
 %.o: %.c $(LIBS)
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(INCL) $(CFLAGS) -c $<
 
 .PHONY: clean
 clean:
