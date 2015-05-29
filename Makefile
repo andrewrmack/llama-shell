@@ -1,7 +1,7 @@
 ### Makefile for llama-shell ###
 
-OBJS=main.o command.o signal_handlers.o
-LIBS=command.h signal_handlers.h
+OBJS=main.o command.o
+LIBS=command.h
 PROG=llama-shell
 
 CFLAGS=-O2

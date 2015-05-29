@@ -30,7 +30,6 @@
 #include <sys/wait.h>
 
 #include "command.h"
-#include "signal_handlers.h"
 
 /* Shell built-ins */
 void change_directory(command_t* cmd);
