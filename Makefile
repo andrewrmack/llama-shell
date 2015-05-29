@@ -1,6 +1,7 @@
 ### Makefile for llama-shell ###
 
-OBJ=main.o command.o
+OBJS=main.o command.o signal_handlers.o
+LIBS=command.h signal_handlers.h
 PROG=llama-shell
 
 CFLAGS=-O2
@@ -11,10 +12,10 @@ all: $(PROG)
 debug: CFLAGS=-g -Wall -Wextra -pedantic
 debug: $(PROG)
 
-$(PROG): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ)
+$(PROG): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
-%.o: %.c command.h
+%.o: %.c $(LIBS)
 	$(CC) $(CFLAGS) -c $<
 
 .PHONY: clean

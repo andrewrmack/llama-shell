@@ -30,6 +30,7 @@
 #include <sys/wait.h>
 
 #include "command.h"
+#include "signal_handlers.h"
 
 /* Shell built-ins */
 void change_directory(command_t* cmd);
@@ -49,22 +50,10 @@ int main(int argc, char* argv[])
         fprintf(stderr, "arguments not yet supported!\n");
         return EXIT_FAILURE;
     }
-    /*** WIP: Signal handling is currently broken ***/
+    /* WIP: Signal handling is currently broken */
     /* Shell shouldn't exit when a child process is killed, so we mask
      * SIGINT, SIGTSTP, and SIGQUIT and will unmask them in the child fork
      */
-
-    //sigset_t sig_mask, old_sig_mask;
-    //sigemptyset(&sig_mask);
-    //sigaddset(&sig_mask, SIGINT);
-    //sigaddset(&sig_mask, SIGTSTP);
-    //sigaddset(&sig_mask, SIGQUIT);
-
-    //if(sigprocmask(SIG_BLOCK, &sig_mask, &old_sig_mask) != 0) {
-    //    fprintf(stderr, "Error masking signals: %s\n"
-    //                    "This may result in problems with ^C, etc.\n",
-    //                    strerror(errno));
-    //}
 
     while(1) {
         /* TODO: implement PS1 variable support */
@@ -94,7 +83,6 @@ int main(int argc, char* argv[])
                     /* give child its own process group */
                     setpgid(0, 0);
 
-                    //sigprocmask(SIG_SETMASK, &old_sig_mask, NULL);
                     execvp(cmd.name, cmd.argv);
                     fprintf(stderr, "Error executing command %s: %s\n",
                             cmd.name, strerror(errno));
