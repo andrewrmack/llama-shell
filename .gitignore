@@ -37,3 +37,4 @@ llama-shell
 
 # Testing programs
 test*
+*.txt # Used for logging output
