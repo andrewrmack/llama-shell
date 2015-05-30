@@ -26,6 +26,8 @@
 #include <ctype.h>
 #include <signal.h>
 #include <libgen.h>
+#include <termios.h>
+
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -43,7 +45,9 @@ int main(int argc, char* argv[])
     /* TODO: change this when implementing pipes, dependend cmds, etc. */
     char *cmdline = cmdbuff;
     command_t cmd;
-    pid_t child;
+    pid_t child, shell_pgid = getpid();
+    struct termios shell_tmodes;
+    int status;
 
     if(argc != 1) {
         /* TODO: Will parse here when args support is added */
@@ -54,6 +58,18 @@ int main(int argc, char* argv[])
     /* Shell shouldn't exit when a child process is killed, so we mask
      * SIGINT, SIGTSTP, and SIGQUIT and will unmask them in the child fork
      */
+    sigset_t signals;
+    sigemptyset(&signals);
+
+    sigaddset(&signals, SIGINT);
+    sigaddset(&signals, SIGTSTP);
+    sigaddset(&signals, SIGQUIT);
+    sigaddset(&signals, SIGTTOU);
+    sigaddset(&signals, SIGTTIN);
+
+    sigprocmask(SIG_BLOCK, &signals, NULL);
+    tcsetpgrp(STDIN_FILENO, shell_pgid);
+    tcgetattr(STDIN_FILENO, &shell_tmodes);
 
     while(1) {
         /* TODO: implement PS1 variable support */
@@ -71,9 +87,10 @@ int main(int argc, char* argv[])
         if(strcmp(cmdline, "\n")) {
             parse_command(cmdline, &cmd);
 
-            if(!strcmp(cmd.name, "cd"))
+            if(!strcmp(cmd.name, "cd")) {
                 change_directory(&cmd);
-            else if(!strcmp(cmd.name, "exit")) {
+                free_command(&cmd);
+            } else if(!strcmp(cmd.name, "exit")) {
                 free_command(&cmd);
                 break;
             } else {
@@ -82,14 +99,23 @@ int main(int argc, char* argv[])
                 if(child == 0) {
                     /* give child its own process group */
                     setpgid(0, 0);
-
+                    sigprocmask(SIG_UNBLOCK, &signals, NULL);
                     execvp(cmd.name, cmd.argv);
                     fprintf(stderr, "Error executing command %s: %s\n",
                             cmd.name, strerror(errno));
                 } else if (child > 0) {
                     /* give child its own process group */
                     setpgid(child, child);
-                    wait(NULL);
+                    tcsetpgrp(STDIN_FILENO, child);
+                    waitpid(child, &status, WUNTRACED);
+                    tcsetpgrp(STDIN_FILENO, shell_pgid);
+                    tcsetattr(STDIN_FILENO, TCSADRAIN, &shell_tmodes);
+                    if(!WIFEXITED(status))
+                        putchar('\n');
+                    if(WIFSTOPPED(status)) {
+                        kill(- child, SIGINT);
+                        printf("[%d]+ Stopped\n", child);
+                    }
                 } else {
                     fprintf(stderr, "Error forking child process: %s\n",
                             strerror(errno));
