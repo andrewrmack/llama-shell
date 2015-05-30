@@ -6,20 +6,20 @@ developing and will hopefully be a full-featured, POSIX compliant shell in the
 near future.
 
 ##Update:
-llama-shell now handles signals correctly :). SIGINT and SIGQUIT both function
+* llama-shell supports the I/O redirection operators >, >>, <, <, 2>, 2>>, and &>. To
+use these operators, they currently must be separated on both sides by
+whitespace (ls > outfile not ls>outfile).
+* llama-shell now handles signals correctly :). SIGINT and SIGQUIT both function
 exactly as expeded, terminating the process in question. However, as support
 for background processes has not yet been implemented, SIGTSTP, SIGTTIN, and
 SIGTTOU will also terminate the process and print a message. This will be
 addressed when background processes are implemented
 
-##Development
-*This is the development branch of llama-shell*. Things will often be broken
-here. Go the the main branch for the stable version of the shell.
-
 ##TO-DO List:
 - [x] Implement signal handling for SIGINT, SIGQUIT, and SIGTSTP
 - [ ] Allow for process backgrounding
-- [ ] Implement I/O redirection (i.e. |, >, >>, etc.)
+- [x] Implement I/O redirection (i.e. >, >>, etc.)
+- [ ] Implement I/O pipes (|)
 - [ ] Make a config file
 - [ ] Tab completion
 - [ ] History
