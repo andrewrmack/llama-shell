@@ -15,6 +15,12 @@ for background processes has not yet been implemented, SIGTSTP, SIGTTIN, and
 SIGTTOU will also terminate the process and print a message. This will be
 addressed when background processes are implemented
 
+##Development
+*This is the development branch of llama-shell*. Things in this branch will
+often be broken, or not work as well as they should. This is currently a
+learning project so I am not taking pull requests at this time. I hope to grow
+this into a full-featured shell, at which point I will welcome contributions.
+
 ##TO-DO List:
 - [x] Implement signal handling for SIGINT, SIGQUIT, and SIGTSTP
 - [ ] Allow for process backgrounding
