@@ -1,5 +1,7 @@
 ### Makefile for llama-shell ###
 
+PREFIX=/usr/local
+
 OBJS=main.o command.o
 LIBS=command.h
 PROG=llama-shell
@@ -22,6 +24,9 @@ $(PROG): $(OBJS)
 %.o: %.c $(LIBS)
 	$(CC) $(INCL) $(CFLAGS) -c $<
 
-.PHONY: clean
+.PHONY: clean install
 clean:
 	rm -f *.o $(PROG)
+
+install: $(PROG)
+	install -m 0755 $(PROG) $(PREFIX)/bin
