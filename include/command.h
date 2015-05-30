@@ -29,6 +29,9 @@ typedef struct {
     char* name;              /* command name, same as argv[0] */
     int argc;                /* number of arguments, including name */
     char* argv[MAX_ARGS+1];  /* array of arguments, argv[0] is name */
+    int infile;              /* the input stream for the process */
+    int outfile;             /* the output stream for the process */
+    int errfile;             /* the error stream for the process */
 } command_t;
 
 int parse_command(char* cmdline, command_t* cmd);

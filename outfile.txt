@@ -1,0 +1,13 @@
+bin
+command.o
+include
+LICENSE
+llama-shell
+main.o
+Makefile
+outfile2.txt
+outfile.txt
+README.md
+src
+test
+test.c

@@ -20,8 +20,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <fcntl.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "command.h"
 
@@ -45,21 +50,68 @@ int parse_command(char *cmdline, command_t *cmd)
     int argc = 0;
     char* word;
 
+    cmd->infile = cmd->outfile = cmd->errfile = -1;
+
     word = strsep(&cmdline, WHITESPACE);
 
     while(word) {
         if(strlen(word)) {
-            cmd->argv[argc] = (char*) malloc((strlen(word)+1)*sizeof(char));
+            if(!strcmp(word, ">") || !strcmp(word, "1>")) {
+                word = strsep(&cmdline, WHITESPACE);
+                cmd->outfile = open(word, O_WRONLY|O_CREAT|O_TRUNC, 0755);
+                if(cmd->outfile == -1) {
+                    fprintf(stderr, "Invalid outfile %s\n", word);
+                    return EXIT_FAILURE;
+                }
+            } else if(!strcmp(word, ">>") || !strcmp(word, "1>>")) {
+                word = strsep(&cmdline, WHITESPACE);
+                cmd->outfile = open(word, O_WRONLY|O_CREAT|O_APPEND, 0755);
+                if(cmd->outfile == -1) {
+                    fprintf(stderr, "Invalid outfile %s\n", word);
+                    return EXIT_FAILURE;
+                }
+            } else if(!strcmp(word, "<")) {
+                word = strsep(&cmdline, WHITESPACE);
+                cmd->infile = open(word, O_RDONLY);
+                if(cmd->infile == -1) {
+                    fprintf(stderr, "Invalid infile %s\n", word);
+                    return EXIT_FAILURE;
+                }
+            } else if(!strcmp(word, "2>")) {
+                word = strsep(&cmdline, WHITESPACE);
+                cmd->errfile = open(word, O_WRONLY|O_CREAT|O_TRUNC, 0755);
+                if(cmd->errfile == -1) {
+                    fprintf(stderr, "Invalid errfile %s\n", word);
+                    return EXIT_FAILURE;
+                }
+            } else if(!strcmp(word, "2>>") || !strcmp(word, "1>")) {
+                word = strsep(&cmdline, WHITESPACE);
+                cmd->errfile = open(word, O_WRONLY|O_CREAT|O_APPEND, 0755);
+                if(cmd->errfile == -1) {
+                    fprintf(stderr, "Invalid errfile %s\n", word);
+                    return EXIT_FAILURE;
+                }
+            } else if(!strcmp(word, "&>") || !strcmp(word, "1>")) {
+                word = strsep(&cmdline, WHITESPACE);
+                cmd->errfile = cmd->outfile = open(word, O_WRONLY|O_CREAT|O_TRUNC, 0755);
+                if(cmd->outfile == -1) {
+                    fprintf(stderr, "Invalid cmd->outfile %s\n", word);
+                    return EXIT_FAILURE;
+                }
+            } else {
 
-            if(cmd->argv[argc] == NULL) {
-                fprintf(stderr,
-                        "Error allocating memory for argument \"%s\": %s\n",
-                        word, strerror(errno));
-                return EXIT_FAILURE;
+                cmd->argv[argc] = (char*) malloc((strlen(word)+1)*sizeof(char));
+
+                if(cmd->argv[argc] == NULL) {
+                    fprintf(stderr,
+                            "Error allocating memory for argument \"%s\": %s\n",
+                            word, strerror(errno));
+                    return EXIT_FAILURE;
+                }
+
+                strcpy(cmd->argv[argc], word);
+                argc++;
             }
-
-            strcpy(cmd->argv[argc], word);
-            argc++;
         }
         word = strsep(&cmdline, WHITESPACE);
     }
@@ -74,6 +126,13 @@ int parse_command(char *cmdline, command_t *cmd)
                 cmd->argv[0], strerror(errno));
         return EXIT_FAILURE;
     }
+
+    if (cmd->infile == -1)
+        cmd->infile = STDIN_FILENO;
+    if (cmd->outfile == -1)
+        cmd->outfile = STDOUT_FILENO;
+    if (cmd->errfile == -1)
+        cmd->errfile = STDERR_FILENO;
 
     strcpy(cmd->name, cmd->argv[0]);
 

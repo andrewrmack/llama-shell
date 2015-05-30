@@ -81,7 +81,8 @@ int main(int argc, char* argv[])
 
         /* ignore blank lines */
         if(strcmp(cmdline, "\n")) {
-            parse_command(cmdline, &cmd);
+            if(parse_command(cmdline, &cmd) == EXIT_FAILURE)
+                break;
 
             if(!strcmp(cmd.name, "cd")) {
                 change_directory(&cmd);
@@ -95,6 +96,11 @@ int main(int argc, char* argv[])
                 if(child == 0) {
                     /* give child its own process group */
                     setpgid(0, 0);
+
+                    dup2(cmd.infile, STDIN_FILENO);
+                    dup2(cmd.outfile, STDOUT_FILENO);
+                    dup2(cmd.errfile, STDERR_FILENO);
+
                     sigprocmask(SIG_UNBLOCK, &signals, NULL);
                     execvp(cmd.name, cmd.argv);
                     fprintf(stderr, "Error executing command %s: %s\n",
