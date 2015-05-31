@@ -39,7 +39,8 @@ void change_directory(command_t* cmd);
 int main(int argc, char* argv[])
 {
     char *user = getenv("USER");
-    char *base_dir = basename(getcwd(NULL, 256));
+    char *cwd = getcwd(NULL, 256);
+    char *base_dir = basename(cwd);
     char cmdbuff[BUF_LEN];
     char *cmdline = cmdbuff;
     command_t cmd;
@@ -51,10 +52,8 @@ int main(int argc, char* argv[])
         fprintf(stderr, "arguments not yet supported!\n");
         return EXIT_FAILURE;
     }
-    /* WIP: Signal handling is currently broken */
-    /* Shell shouldn't exit when a child process is killed, so we mask
-     * SIGINT, SIGTSTP, and SIGQUIT and will unmask them in the child fork
-     */
+
+    /* mask signals so shell doesn't quit when killing child */
     sigset_t signals;
     sigemptyset(&signals);
 
@@ -126,11 +125,14 @@ int main(int argc, char* argv[])
             }
 
         free_command(&cmd);
+        free(cwd);
         user = getenv("USER");
-        base_dir = basename(getcwd(NULL, 256));
+        cwd = getcwd(NULL, 256);
+        base_dir = basename(cwd);
         }
     }
 
+    free(cwd);
     return EXIT_SUCCESS;
 }
 

@@ -99,7 +99,6 @@ int parse_command(char *cmdline, command_t *cmd)
                     return EXIT_FAILURE;
                 }
             } else {
-
                 cmd->argv[argc] = (char*) malloc((strlen(word)+1)*sizeof(char));
 
                 if(cmd->argv[argc] == NULL) {
