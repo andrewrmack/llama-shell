@@ -38,13 +38,13 @@ void change_directory(command_t* cmd);
 
 int main(int argc, char* argv[])
 {
-    char *user = getenv("USER");
-    char *cwd = getcwd(NULL, 256);
-    char *base_dir = basename(cwd);
+    char *user;
+    char *cwd;
+    char *base_dir;
     char cmdbuff[BUF_LEN];
-    char *cmdline = cmdbuff;
+    char *cmdline;
     command_t cmd;
-    pid_t child, shell_pgid = getpid();
+    pid_t child, shell_pgid;
     struct termios shell_tmodes;
     int status;
 
@@ -52,6 +52,15 @@ int main(int argc, char* argv[])
         fprintf(stderr, "arguments not yet supported!\n");
         return EXIT_FAILURE;
     }
+
+    /* Get environment for prompt */
+    user = getenv("USER");
+    cwd = getcwd(NULL, 256);
+    base_dir = basename(cwd);
+
+    cmdline = cmdbuff;
+
+    shell_pgid = getpid();
 
     /* mask signals so shell doesn't quit when killing child */
     sigset_t signals;
