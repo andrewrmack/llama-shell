@@ -61,6 +61,8 @@ int main(int argc, char* argv[])
     cmdline = cmdbuff;
 
     shell_pgid = getpid();
+    while(tcgetpgrp(STDIN_FILENO) != (shell_pgid = getpgrp()))
+        kill(- shell_pgid, SIGTTIN);
 
     /* mask signals so shell doesn't quit when killing child */
     sigset_t signals;
