@@ -75,6 +75,15 @@ int main(int argc, char* argv[])
     sigaddset(&signals, SIGTTIN);
 
     sigprocmask(SIG_BLOCK, &signals, NULL);
+
+    /* set up shell's process */
+    shell_pgid = getpid();
+    if(setpgid(shell_pgid, shell_pgid) < 0) {
+        fprintf(stderr, "%s: could not put shell in own group: %s\n",
+                argv[0], strerror(errno));
+        return EXIT_FAILURE;
+    }
+
     tcsetpgrp(STDIN_FILENO, shell_pgid);
     tcgetattr(STDIN_FILENO, &shell_tmodes);
 
