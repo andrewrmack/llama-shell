@@ -10,9 +10,6 @@ CFLAGS=-O2
 INCL=-Iinclude/
 CC=gcc
 
-vpath %.h include/
-vpath %.c src/
-
 all: $(PROG)
 
 debug: CFLAGS=-g -Wall -Wextra -pedantic
