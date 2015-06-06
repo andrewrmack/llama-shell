@@ -19,11 +19,6 @@
  */
 
 #ifndef _COMMAND_H
-
-#include <features.h>
-
-__BEGIN_DECLS
-
 #define _COMMAND_H
 
 #define BUF_LEN 256
