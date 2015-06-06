@@ -32,6 +32,7 @@
 #include <sys/wait.h>
 
 #include "command.h"
+#include "getargs.h"
 
 /* Shell built-ins */
 void change_directory(command_t* cmd);
@@ -47,11 +48,12 @@ int main(int argc, char* argv[])
     pid_t child, shell_pgid;
     struct termios shell_tmodes;
     int status;
+    int arg_status;
 
-    if(argc != 1) {
-        fprintf(stderr, "arguments not yet supported!\n");
+    if((arg_status = getargs(argc, argv)) == 1)
+        return EXIT_SUCCESS;
+    else if (arg_status == -1)
         return EXIT_FAILURE;
-    }
 
     /* Get environment for prompt */
     user = getenv("USER");

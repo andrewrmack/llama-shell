@@ -2,11 +2,14 @@
 
 PREFIX=/usr/local
 
-OBJS=main.o command.o
-LIBS=command.h
+MACHINFO="$(shell uname -m)-$(shell uname -i)-$(shell uname -o)"
+
+OBJS=main.o command.o getargs.o
+LIBS=command.h getargs.h version.h
 PROG=llama-shell
 
 CFLAGS=-O2
+CPPFLAGS=-DMACHTYPE='$(MACHINFO)'
 CC=gcc
 
 all: $(PROG)
@@ -18,7 +21,7 @@ $(PROG): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
 %.o: %.c $(LIBS)
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
 
 .PHONY: clean install
 clean:
