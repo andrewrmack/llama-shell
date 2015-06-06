@@ -3,9 +3,7 @@
 
 int getargs(int argc, char *argv[]);
 
-void printhelp();
-void printversion();
-
-__END_DECLS
+void printhelp(void);
+void printversion(void);
 
 #endif

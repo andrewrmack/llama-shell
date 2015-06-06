@@ -58,7 +58,7 @@ int getargs(int argc, char *argv[])
     return 0;
 }
 
-void printhelp()
+void printhelp(void)
 {
     printf("llama-shell: a minimal Linux shell\n"
            "\tTo use llama-shell, call llama-shell with no arguments\n"
@@ -71,7 +71,7 @@ void printhelp()
            " <https://github.com/andrewrmack/llama-shell>\n");
 }
 
-void printversion()
+void printversion(void)
 {
     printf("llama-shell, version %s (%s)\n", VERSION, MACHTYPE);
     printf("License GPLv2+: GNU GPL version 2 or later"
