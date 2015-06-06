@@ -7,7 +7,6 @@ LIBS=command.h
 PROG=llama-shell
 
 CFLAGS=-O2
-INCL=-Iinclude/
 CC=gcc
 
 all: $(PROG)
@@ -19,7 +18,7 @@ $(PROG): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
 %.o: %.c $(LIBS)
-	$(CC) $(INCL) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $<
 
 .PHONY: clean install
 clean:
