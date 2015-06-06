@@ -1,4 +1,5 @@
 /* llama-shell -- a linux shell */
+/* command.h -- header for command.c */
 
 /* Copyright (C) 2015 Andrew Mack
  *

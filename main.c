@@ -1,4 +1,5 @@
 /* llama-shell -- a linux shell */
+/* main.c -- main shell loop */
 
 /* Copyright (C) 2015 Andrew Mack
  *
