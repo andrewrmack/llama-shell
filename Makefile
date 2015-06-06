@@ -8,13 +8,19 @@ OBJS=main.o command.o getargs.o
 LIBS=command.h getargs.h version.h
 PROG=llama-shell
 
-CFLAGS=-O2
+CFLAGS=-O2 -pipe -fstack-protector -Wl,-z,relro -Wl,-z,now -Wl,-O1 \
+       -fno-exceptions
 CPPFLAGS=-DMACHTYPE='$(MACHINFO)'
 CC=gcc
 
 all: $(PROG)
 
-debug: CFLAGS=-g -Wall -Wextra -pedantic
+debug: CFLAGS+=-g -Wall -Wextra -pedantic -Wfloat-equal -Wundef \
+               -Wshadow -Wpointer-arith -Wcast-align \
+               -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings \
+               -Waggregate-return -Wcast-qual -Wswitch-default \
+               -Wswitch-enum -Wconversion -Wunreachable-code -Werror \
+               -Wformat-security -Wformat-nonliteral
 debug: $(PROG)
 
 $(PROG): $(OBJS)
