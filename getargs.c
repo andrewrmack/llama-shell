@@ -62,10 +62,13 @@ void printhelp()
 {
     printf("llama-shell: a minimal Linux shell\n"
            "\tTo use llama-shell, call llama-shell with no arguments\n"
-           "\tTo check version information, call llama-shell with -v"
+           "\tTo check version, call llama-shell with -v"
            " or --version option\n"
            "\tTo print this help, call llama-shell with -h or --help"
            " option\n");
+    printf("Report bugs to: andrewrmack@gmail.com\n"
+           "llama-shell home page:"
+           " <https://github.com/andrewrmack/llama-shell>\n");
 }
 
 void printversion()
