@@ -18,8 +18,13 @@
  * along with llama-shell. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __COMMAND_H__
-#define __COMMAND_H__
+#ifndef _COMMAND_H
+
+#include <features.h>
+
+__BEGIN_DECLS
+
+#define _COMMAND_H
 
 #define BUF_LEN 256
 #define MAX_ARGS BUF_LEN/2
@@ -36,5 +41,7 @@ typedef struct {
 
 int parse_command(char* cmdline, command_t* cmd);
 void free_command(command_t* cmd);
+
+__END_DECLS
 
 #endif
