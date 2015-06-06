@@ -37,6 +37,4 @@ typedef struct {
 int parse_command(char* cmdline, command_t* cmd);
 void free_command(command_t* cmd);
 
-__END_DECLS
-
 #endif
