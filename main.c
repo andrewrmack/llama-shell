@@ -1,7 +1,7 @@
 /* llama-shell -- a linux shell */
 /* main.c -- main shell loop */
 
-/* Copyright (C) 2015 Andrew Mack
+/* Author: Andrew Mack
  *
  * This file is part of llama-shell
  *

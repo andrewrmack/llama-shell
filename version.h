@@ -1,7 +1,7 @@
 /* llama-shell -- a linux shell */
 /* version.h -- version information macros */
 
-/* Copyright (C) 2015 Andrew Mack
+/* Author: Andrew Mack
  *
  * This file is part of llama-shell
  *
