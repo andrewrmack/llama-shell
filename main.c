@@ -49,9 +49,8 @@ int main(int argc, char* argv[])
     pid_t child, shell_pgid;
     struct termios shell_tmodes;
     int status;
-    int arg_status;
 
-    if((arg_status = getargs(argc, argv)) == 1)
+    if(getargs(argc, argv) == 1)
         return EXIT_SUCCESS;
 
     /* Get environment for prompt */
@@ -125,6 +124,7 @@ int main(int argc, char* argv[])
                     execvp(cmd.name, cmd.argv);
                     fprintf(stderr, "Error executing command %s: %s\n",
                             cmd.name, strerror(errno));
+                    return EXIT_FAILURE;
                 } else if (child > 0) {
                     /* give child its own process group */
                     setpgid(child, child);
