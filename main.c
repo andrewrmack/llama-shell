@@ -53,8 +53,6 @@ int main(int argc, char* argv[])
 
     if((arg_status = getargs(argc, argv)) == 1)
         return EXIT_SUCCESS;
-    else if (arg_status == -1)
-        return EXIT_FAILURE;
 
     /* Get environment for prompt */
     user = getenv("USER");
