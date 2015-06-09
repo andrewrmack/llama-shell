@@ -46,6 +46,8 @@
  */
 int getargs(int argc, char *argv[])
 {
+    int unrec = 0;
+
     while(1) {
 
         int c;
@@ -65,6 +67,8 @@ int getargs(int argc, char *argv[])
             break;
 
         switch(c) {
+            case 0:
+                break;
             case 'v':
                 printversion();
                 return 1;
@@ -72,10 +76,15 @@ int getargs(int argc, char *argv[])
                 printhelp();
                 return 1;
             default:
-                return -1;
+                unrec++;
+                break;
 
         }
     }
+
+    if(unrec > 0)
+        fprintf(stderr,
+                "Warning, ignoring %d unrecognized options\n", unrec);
 
     return 0;
 }
