@@ -94,17 +94,19 @@ int parse_command(char *cmdline, command_t *cmd)
                 }
             } else if(!strcmp(word, "&>") || !strcmp(word, "1>")) {
                 word = strsep(&cmdline, WHITESPACE);
-                cmd->errfile = cmd->outfile = open(word, O_WRONLY|O_CREAT|O_TRUNC, 0755);
+                cmd->errfile = cmd->outfile =
+                        open(word, O_WRONLY|O_CREAT|O_TRUNC, 0755);
                 if(cmd->outfile == -1) {
                     fprintf(stderr, "Invalid cmd->outfile %s\n", word);
                     return EXIT_FAILURE;
                 }
             } else {
-                cmd->argv[argc] = (char*) malloc((strlen(word)+1)*sizeof(char));
+                cmd->argv[argc] = (char*)
+                                   malloc((strlen(word)+1)*sizeof(char));
 
                 if(cmd->argv[argc] == NULL) {
                     fprintf(stderr,
-                            "Error allocating memory for argument \"%s\": %s\n",
+                            "Error allocating memory for \"%s\": %s\n",
                             word, strerror(errno));
                     return EXIT_FAILURE;
                 }
