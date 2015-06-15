@@ -134,10 +134,8 @@ int main(int argc, char* argv[])
                     tcsetattr(STDIN_FILENO, TCSADRAIN, &shell_tmodes);
                     if(!WIFEXITED(status))
                         putchar('\n');
-                    if(WIFSTOPPED(status)) {
-                        kill(- child, SIGINT);
+                    if(WIFSTOPPED(status))
                         printf("[%d]+ Stopped\n", child);
-                    }
                 } else {
                     fprintf(stderr, "Error forking child process: %s\n",
                             strerror(errno));
