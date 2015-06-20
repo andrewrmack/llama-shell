@@ -32,6 +32,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#include "config.h"
 #include "command.h"
 #include "getargs.h"
 
