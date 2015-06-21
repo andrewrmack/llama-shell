@@ -62,35 +62,35 @@ int parse_command(char *cmdline, command_t *cmd)
                 word = strsep(&cmdline, WHITESPACE);
                 cmd->outfile = open(word, O_WRONLY|O_CREAT|O_TRUNC, 0755);
                 if(cmd->outfile == -1) {
-                    fprintf(stderr, "Invalid outfile %s\n", word);
+                    fprintf(stderr, _("Invalid outfile %s\n"), word);
                     return EXIT_FAILURE;
                 }
             } else if(!strcmp(word, ">>") || !strcmp(word, "1>>")) {
                 word = strsep(&cmdline, WHITESPACE);
                 cmd->outfile = open(word, O_WRONLY|O_CREAT|O_APPEND, 0755);
                 if(cmd->outfile == -1) {
-                    fprintf(stderr, "Invalid outfile %s\n", word);
+                    fprintf(stderr, _("Invalid outfile %s\n"), word);
                     return EXIT_FAILURE;
                 }
             } else if(!strcmp(word, "<")) {
                 word = strsep(&cmdline, WHITESPACE);
                 cmd->infile = open(word, O_RDONLY);
                 if(cmd->infile == -1) {
-                    fprintf(stderr, "Invalid infile %s\n", word);
+                    fprintf(stderr, _("Invalid infile %s\n"), word);
                     return EXIT_FAILURE;
                 }
             } else if(!strcmp(word, "2>")) {
                 word = strsep(&cmdline, WHITESPACE);
                 cmd->errfile = open(word, O_WRONLY|O_CREAT|O_TRUNC, 0755);
                 if(cmd->errfile == -1) {
-                    fprintf(stderr, "Invalid errfile %s\n", word);
+                    fprintf(stderr, _("Invalid errfile %s\n"), word);
                     return EXIT_FAILURE;
                 }
             } else if(!strcmp(word, "2>>") || !strcmp(word, "1>")) {
                 word = strsep(&cmdline, WHITESPACE);
                 cmd->errfile = open(word, O_WRONLY|O_CREAT|O_APPEND, 0755);
                 if(cmd->errfile == -1) {
-                    fprintf(stderr, "Invalid errfile %s\n", word);
+                    fprintf(stderr, _("Invalid errfile %s\n"), word);
                     return EXIT_FAILURE;
                 }
             } else if(!strcmp(word, "&>") || !strcmp(word, "1>")) {
@@ -98,7 +98,7 @@ int parse_command(char *cmdline, command_t *cmd)
                 cmd->errfile = cmd->outfile =
                         open(word, O_WRONLY|O_CREAT|O_TRUNC, 0755);
                 if(cmd->outfile == -1) {
-                    fprintf(stderr, "Invalid cmd->outfile %s\n", word);
+                    fprintf(stderr, _("Invalid cmd->outfile %s\n"), word);
                     return EXIT_FAILURE;
                 }
             } else {
@@ -107,7 +107,7 @@ int parse_command(char *cmdline, command_t *cmd)
 
                 if(cmd->argv[argc] == NULL) {
                     fprintf(stderr,
-                            "Error allocating memory for \"%s\": %s\n",
+                            _("Error allocating memory for \"%s\": %s\n"),
                             word, strerror(errno));
                     return EXIT_FAILURE;
                 }
@@ -125,7 +125,7 @@ int parse_command(char *cmdline, command_t *cmd)
     cmd->name = (char*) malloc((strlen(cmd->argv[0])+1)*sizeof(char));
 
     if (NULL == cmd->name) {
-        fprintf(stderr, "Error allocating memory for command name %s: %s\n",
+        fprintf(stderr, _("Error allocating memory for command name %s: %s\n"),
                 cmd->argv[0], strerror(errno));
         return EXIT_FAILURE;
     }

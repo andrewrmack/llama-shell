@@ -26,6 +26,13 @@
 #define MAX_ARGS BUF_LEN/2
 #define WHITESPACE " \t\n"
 
+#if HAVE_LIBINTL_H == 1
+#include <libintl.h>
+#  define _(msg) gettext(msg)
+#else
+#  define _(msg) msg
+#endif
+
 typedef struct {
     char* name;              /* command name, same as argv[0] */
     int argc;                /* number of arguments, including name */

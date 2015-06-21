@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
     /* set up shell's process */
     shell_pgid = getpid();
     if(setpgid(shell_pgid, shell_pgid) < 0) {
-        fprintf(stderr, "%s: could not put shell in own group: %s\n",
+        fprintf(stderr, _("%s: could not put shell in own group: %s\n"),
                 argv[0], strerror(errno));
         return EXIT_FAILURE;
     }
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
     tcgetattr(STDIN_FILENO, &shell_tmodes);
 
     while(1) {
-        printf("[%s] %s $ ", user, base_dir);
+        printf(_("[%s] %s $ "), user, base_dir);
         if(fgets(cmdline, BUF_LEN, stdin) == NULL) {
             putchar('\n');
             return EXIT_SUCCESS;
@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
 
                     sigprocmask(SIG_UNBLOCK, &signals, NULL);
                     execvp(cmd.name, cmd.argv);
-                    fprintf(stderr, "Error executing command %s: %s\n",
+                    fprintf(stderr, _("Error executing command %s: %s\n"),
                             cmd.name, strerror(errno));
                     return EXIT_FAILURE;
                 } else if (child > 0) {
@@ -136,9 +136,9 @@ int main(int argc, char* argv[])
                     if(!WIFEXITED(status))
                         putchar('\n');
                     if(WIFSTOPPED(status))
-                        printf("[%d]+ Stopped\n", child);
+                        printf(_("[%d]+ Stopped\n"), child);
                 } else {
-                    fprintf(stderr, "Error forking child process: %s\n",
+                    fprintf(stderr, _("Error forking child process: %s\n"),
                             strerror(errno));
                     return EXIT_FAILURE;
                 }
@@ -176,5 +176,5 @@ void change_directory(command_t* cmd)
     } else if (cmd->argc == 2)
         chdir(cmd->argv[1]);
     else
-        fprintf(stderr, "cd: too many arguments!\n");
+        fputs(_("cd: too many arguments!\n"), stderr);
 }

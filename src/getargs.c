@@ -25,6 +25,7 @@
 #include <getopt.h>
 
 #include "getargs.h"
+#include "command.h"
 #include "config.h"
 
 /**
@@ -84,30 +85,31 @@ int getargs(int argc, char *argv[])
 
     if(unrec > 0)
         fprintf(stderr,
-                "Warning, ignoring %d unrecognized options\n", unrec);
+                _("Warning, ignoring %d unrecognized options\n"), unrec);
 
     return 0;
 }
 
 void printhelp(void)
 {
-    printf("llama-shell: a minimal Linux shell\n"
-           "\tTo use llama-shell, call llama-shell with no arguments\n"
-           "\tTo check version, call llama-shell with -v"
-           " or --version option\n"
-           "\tTo print this help, call llama-shell with -h or --help"
-           " option\n");
-    printf("Report bugs to: andrewrmack@gmail.com\n"
-           "llama-shell home page:"
-           " <https://github.com/andrewrmack/llama-shell>\n");
+   fputs(_("\
+llama-shell: a minimal Linux shell\n\
+\tTo use llama-shell, call llama-shell with no arguments\n\
+\tTo check version, call llama-shell with -v or --version option\n\
+\tTo print this help, call llama-shell with -h or --help option\n\
+Report bugs to: <andrewrmack@gmail.com>\n\
+llama-shell home page:\n\
+\t<https://github.com/andrewrmack/llama-shell>\n\
+"), stdout);
 }
 
 void printversion(void)
 {
-    printf("llama-shell, version %s (%s)\n", VERSION, MACHTYPE);
-    printf("License GPLv2+: GNU GPL version 2 or later"
-           " <http://gnu.org/licenses/gpl-2.0.html>\n");
-    printf("\nThis if free software;"
-           " you are free to change and redistribute it.\n");
-    printf("There is NO WARRANTY, to the extent permitted by the law\n");
+    printf(_("llama-shell, version %s (%s)\n"), VERSION, MACHTYPE);
+    fputs(_("\
+License GPLv2: GNU GPL version 2 <http://gnu.org/licenses/gpl-2.0.html>\n\n\
+This if free software; you are free to change and redistribute it.\n\
+There is NO WARRANTY, to the extent permitted by the law\n\n\
+Author: Andrew Mack <andrewrmack@gmail.com>\n\
+"), stdout);
 }
