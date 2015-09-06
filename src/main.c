@@ -106,7 +106,6 @@ int main(int argc, char* argv[])
 
             if(!strcmp(cmd.name, "cd")) {
                 change_directory(&cmd);
-                free_command(&cmd);
             } else if(!strcmp(cmd.name, "exit")) {
                 free_command(&cmd);
                 break;
@@ -123,8 +122,8 @@ int main(int argc, char* argv[])
 
                     sigprocmask(SIG_UNBLOCK, &signals, NULL);
                     execvp(cmd.name, cmd.argv);
-                    fprintf(stderr, _("Error executing command %s: %s\n"),
-                            cmd.name, strerror(errno));
+                    fprintf(stderr, _("command \"%s\" not found\n"),
+                            cmd.name);
                     return EXIT_FAILURE;
                 } else if (child > 0) {
                     /* give child its own process group */
